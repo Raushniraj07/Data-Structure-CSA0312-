@@ -1,0 +1,65 @@
+#include <stdio.h>
+
+#define MAX_SIZE 100
+
+int main() {
+    int arr[MAX_SIZE], n, i, pos, val;
+
+    // Input the size of the array
+    printf("Enter the size of the array (max 100): ");
+    scanf("%d", &n);
+
+    // Input the array elements
+    printf("Enter the array elements: ");
+    for(i=0; i<n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Display the array elements
+    printf("The array is: ");
+    for(i=0; i<n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    // Insert an element into the array
+    printf("Enter the position where you want to insert an element: ");
+    scanf("%d", &pos);
+    printf("Enter the value you want to insert: ");
+    scanf("%d", &val);
+
+    if(pos < 1 || pos > n+1) {
+        printf("Invalid position!\n");
+    } else {
+        for(i=n-1; i>=pos-1; i--) {
+            arr[i+1] = arr[i];
+        }
+        arr[pos-1] = val;
+        n++;
+        printf("The array after insertion is: ");
+        for(i=0; i<n; i++) {
+            printf("%d ", arr[i]);
+        }
+        printf("\n");
+    }
+
+    // Delete an element from the array
+    printf("Enter the position where you want to delete an element: ");
+    scanf("%d", &pos);
+
+    if(pos < 1 || pos > n) {
+        printf("Invalid position!\n");
+    } else {
+        for(i=pos-1; i<n-1; i++) {
+            arr[i] = arr[i+1];
+        }
+        n--;
+        printf("The array after deletion is: ");
+        for(i=0; i<n; i++) {
+            printf("%d ", arr[i]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
