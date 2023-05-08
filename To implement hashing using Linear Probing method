@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define SIZE 10
+
+int hash(int key) {
+    return key % SIZE;
+}
+
+int probe(int H[], int key) {
+    int index = hash(key);
+    int i = 0;
+    while (H[(index + i) % SIZE] != 0) {
+        i++;
+    }
+    return (index + i) % SIZE;
+}
+
+void insert(int H[], int key) {
+    int index = hash(key);
+    if (H[index] != 0) {
+        index = probe(H, key);
+    }
+    H[index] = key;
+}
+
+bool search(int H[], int key) {
+    int index = hash(key);
+    int i = 0;
+    while (H[(index + i) % SIZE] != key) {
+        if (H[(index + i) % SIZE] == 0) {
+            return false;
+        }
+        i++;
+    }
+    return true;
+}
+
+void display(int H[]) {
+    int i;
+    printf("Hash Table\n");
+    for (i = 0; i < SIZE; i++) {
+        printf("%d ", H[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int A[] = { 26, 30, 45, 23, 25, 43 };
+    int n = sizeof(A) / sizeof(A[0]);
+
+    int H[SIZE] = { 0 };
+
+    for (int i = 0; i < n; i++) {
+        insert(H, A[i]);
+    }
+
+    display(H);
+
+    int key = 45;
+    if (search(H, key)) {
+        printf("%d found in Hash Table\n", key);
+    } else {
+        printf("%d not found in Hash Table\n", key);
+    }
+
+    key = 35;
+    if (search(H, key)) {
+        printf("%d found in Hash Table\n", key);
+    } else {
+        printf("%d not found in Hash Table\n", key);
+    }
+
+    return 0;
+}
