@@ -1,0 +1,115 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_VERTICES 100
+
+// Graph structure
+typedef struct {
+    int adjacencyMatrix[MAX_VERTICES][MAX_VERTICES];
+    int numVertices;
+} Graph;
+
+// Stack structure
+typedef struct {
+    int data[MAX_VERTICES];
+    int top;
+} Stack;
+
+// Function to initialize the graph
+void initializeGraph(Graph* graph, int numVertices) {
+    graph->numVertices = numVertices;
+
+    // Initialize all elements of adjacency matrix to 0
+    for (int i = 0; i < numVertices; i++) {
+        for (int j = 0; j < numVertices; j++) {
+            graph->adjacencyMatrix[i][j] = 0;
+        }
+    }
+}
+
+// Function to add an edge to the graph
+void addEdge(Graph* graph, int startVertex, int endVertex) {
+    // Add edge in both directions since the graph is undirected
+    graph->adjacencyMatrix[startVertex][endVertex] = 1;
+    graph->adjacencyMatrix[endVertex][startVertex] = 1;
+}
+
+// Function to initialize the stack
+void initializeStack(Stack* stack) {
+    stack->top = -1;
+}
+
+// Function to push an element onto the stack
+void push(Stack* stack, int value) {
+    stack->data[++(stack->top)] = value;
+}
+
+// Function to pop an element from the stack
+int pop(Stack* stack) {
+    return stack->data[(stack->top)--];
+}
+
+// Function to check if the stack is empty
+bool isEmpty(Stack* stack) {
+    return stack->top == -1;
+}
+
+// DFS traversal
+void depthFirstSearch(Graph* graph, int startVertex, bool visited[]) {
+    Stack stack;
+    initializeStack(&stack);
+
+    // Mark the start vertex as visited and push it onto the stack
+    visited[startVertex] = true;
+    push(&stack, startVertex);
+
+    printf("DFS traversal: ");
+
+    while (!isEmpty(&stack)) {
+        // Pop a vertex from the stack and print it
+        int currentVertex = pop(&stack);
+        printf("%d ", currentVertex);
+
+        // Visit all adjacent vertices of the current vertex
+        for (int i = 0; i < graph->numVertices; i++) {
+            if (graph->adjacencyMatrix[currentVertex][i] == 1 && !visited[i]) {
+                // Mark the adjacent vertex as visited and push it onto the stack
+                visited[i] = true;
+                push(&stack, i);
+            }
+        }
+    }
+
+    printf("\n");
+}
+
+// Main function
+int main() {
+    Graph graph;
+    int numVertices, numEdges;
+    int startVertex;
+
+    printf("Enter the number of vertices in the graph: ");
+    scanf("%d", &numVertices);
+
+    initializeGraph(&graph, numVertices);
+
+    printf("Enter the number of edges in the graph: ");
+    scanf("%d", &numEdges);
+
+    printf("Enter the edges (format: start_vertex end_vertex):\n");
+    for (int i = 0; i < numEdges; i++) {
+        int start, end;
+        scanf("%d %d", &start, &end);
+        addEdge(&graph, start, end);
+    }
+
+    printf("Enter the starting vertex for DFS traversal: ");
+    scanf("%d", &startVertex);
+
+    bool visited[MAX_VERTICES] = { false };
+
+    depthFirstSearch(&graph, startVertex, visited);
+
+    return 0;
+}
